@@ -1,12 +1,15 @@
 package reports
 
 import (
-	"fmt"
+	"errors"
+	"github.com/fogleman/gg"
+	"log"
 )
-
 
 type PoliceReportTemplate struct {
 	File             string
+	X                int
+	Y                int
 	Case             Text
 	Date             Text
 	Suspect          Text
@@ -20,74 +23,51 @@ type PoliceReportTemplate struct {
 }
 
 type Text struct {
-	Text string
-	Font string
-	X    int
-	Y    int
+	String string
+	Font   string
+	X      float64
+	Y      float64
 }
 
+func Draw(dc *gg.Context, t string, x float64, y float64, font string) error {
 
-func (r PoliceReportTemplate) GeneratePolice() {
-	fmt.Println(r)
-
-	/*
-		const X = 1200
-		const Y = 1650
-
-		t := time.Now()
-
-		im, err := gg.LoadImage("police_report_template.jpeg")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		dc := gg.NewContext(X, Y)
-
-		dc.SetRGB(1, 1, 1)
-		dc.Clear()
-		dc.SetRGB(0, 0, 0)
-
-		if err := dc.LoadFontFace("standard.ttf", 30); err != nil {
-			panic(err)
-		}
-
-		dc.DrawRoundedRectangle(0, 0, 512, 512, 0)
-		dc.DrawImage(im, 0, 0)
-
-	// Case number
-	dc.DrawStringAnchored("214324-4-234", 400, 460, 0.5, 0.5)
-	// Date
-	dc.DrawStringAnchored(t.Format("2006-01-02 15:04:05"), 850, 460, 0.5, 0.5)
-	// Suspect
-	dc.DrawStringAnchored("Anderson Smith", 520, 610, 0.5, 0.5)
-	// Offense #1
-	dc.DrawStringAnchored("Lewd Behavior", 520, 760, 0.5, 0.5)
-
-	// Offense #2
-	dc.DrawStringAnchored("Public Intoxication", 520, 850, 0.5, 0.5)
-
-	// Offense #3
-	dc.DrawStringAnchored("N/A", 520, 940, 0.5, 0.5)
-
-	// Offense #4
-	dc.DrawStringAnchored("N/A", 520, 1030, 0.5, 0.5)
-
-	// Offense #5
-	dc.DrawStringAnchored("N/A", 520, 1120, 0.5, 0.5)
-
-	// Reporting Officer
-	dc.DrawStringAnchored("Lt. Farva", 650, 1360, 0.5, 0.5)
-
-	// Signature
-	if err := dc.LoadFontFace("signature.ttf", 45); err != nil {
-		panic(err)
+	if err := dc.LoadFontFace(font, 45); err != nil {
+		return errors.New("Unable to load font: " + font)
 	}
 
-	dc.DrawStringAnchored("Lt. Farva", 550, 1460, 0.5, 0.5)
+	dc.DrawStringAnchored(t, x, y, 0.5, 0.5)
+
+	return nil
+}
+
+func (r PoliceReportTemplate) GeneratePolice() {
+
+	im, err := gg.LoadImage(r.File)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dc := gg.NewContext(r.X, r.Y)
+
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.SetRGB(0, 0, 0)
+
+	dc.DrawImage(im, 0, 0)
+
+	Draw(dc, r.Case.String, r.Case.X, r.Case.Y, r.Case.Font)
+	Draw(dc, r.Suspect.String, r.Suspect.X, r.Suspect.Y, r.Suspect.Font)
+	Draw(dc, r.Date.String, r.Date.X, r.Date.Y, r.Date.Font)
+	Draw(dc, r.OffenseOne.String, r.OffenseOne.X, r.OffenseOne.Y, r.OffenseOne.Font)
+	Draw(dc, r.OffenseTwo.String, r.OffenseTwo.X, r.OffenseTwo.Y, r.OffenseTwo.Font)
+	Draw(dc, r.OffenseThree.String, r.OffenseThree.X, r.OffenseThree.Y, r.OffenseThree.Font)
+	Draw(dc, r.OffenseFour.String, r.OffenseFour.X, r.OffenseFour.Y, r.OffenseFour.Font)
+	Draw(dc, r.OffenseFive.String, r.OffenseFive.X, r.OffenseFive.Y, r.OffenseFive.Font)
+	Draw(dc, r.ReportingOfficer.String, r.ReportingOfficer.X, r.ReportingOfficer.Y, r.ReportingOfficer.Font)
+	Draw(dc, r.Signature.String, r.Signature.X, r.Signature.Y, r.Signature.Font)
 
 	dc.Clip()
 
 	dc.SavePNG("out.png")
 
-	*/
 }
