@@ -16,7 +16,7 @@ func main() {
 			Date:      reports.Text{String: "12/21/2019 11:00:23", Font: "1942.ttf", X: 340, Y: 1225, FontSize: 24},
 			EMS:       reports.Text{String: "Anderson Smith", Font: "1942.ttf", X: 465, Y: 1325, FontSize: 36},
 			Signature: reports.Text{String: "Anderson Smith", Font: "signature2.ttf", X: 465, Y: 1395, FontSize: 48},
-			Printed:      reports.Text{String: "12/21/2019 11:00:23", Font: "1942.ttf", X: 285, Y: 1570, FontSize: 24},
+			Printed:   reports.Text{String: "12/21/2019 11:00:23", Font: "1942.ttf", X: 285, Y: 1570, FontSize: 24},
 		}
 
 		tox.GenerateToxicology()
